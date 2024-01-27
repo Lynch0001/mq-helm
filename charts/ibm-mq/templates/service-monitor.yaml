@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "ibm-mq.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{ include "ibm-mq.labels" . | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/name: ibm-mq
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: "9157"
+      path: "/metrics"
+      interval: "10s"
